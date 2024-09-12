@@ -1,0 +1,324 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.1.0"
+  title: "API Documentation for Chatbot Application"
+  contact:
+    email: "developerbiodun@gmail.com"
+  license:
+    name: "NodeJS Runtime Environement"
+    url: "http://www.nodejs.org/"
+host: "localhost:4000"
+basePath: "/v1"
+
+tags:
+  - name: "Shareholder"
+    description: "Everything about the shareholder Status"
+    externalDocs:
+      description: "Find out more"
+      url: "http://localhost:4000/"
+
+schemes:
+  - "https"
+  - "http"
+
+securityDefinitions:
+  Token:
+    description: ""
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+paths:
+  /email/{email}:
+    get:
+      tags:
+        - "Shareholder"
+      summary: "Find email address"
+      description: "Returns a single email info"
+      operationId: "vertifyEmailAddress"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: "email"
+          in: "path"
+          description: "Email address entry"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Shareholders"
+        "400":
+          description: "Invalid email address"
+        "404":
+          description: "Email address not found"
+
+  /phone/{phone}:
+    get:
+      tags:
+        - "Shareholder"
+      summary: "Find shareholder phone"
+      description: "Returns shareholder valid phone number"
+      operationId: "vertifyPhoneNumber"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: "phone"
+          in: "path"
+          description: "shareholders phone number"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Shareholders"
+        "400":
+          description: "Invalid phone number"
+        "404":
+          description: "Phone not found"
+
+  /sendotp:
+    post:
+      tags:
+        - "Shareholder"
+      summary: "Send for an OTP request code a phone"
+      description: ""
+      operationId: "sendOtpSms"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/P_OTP"
+
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/P_OTP"
+        "400":
+          description: "Invalid inpu"
+        "404":
+          description: "Not found"
+
+  /validateOTP:
+    post:
+      tags:
+        - "Shareholder"
+      summary: "Validate OTP"
+      description: ""
+      operationId: "validateOtp"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/OTP"
+
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/OTP"
+        "400":
+          description: "Invalid input supplied"
+        "404":
+          description: "Page not found"
+
+  /customersdetailsphone:
+    get:
+      tags:
+        - "Shareholder"
+      summary: "Get Shareholders' dividend records Via Phone Input"
+      description: ""
+      operationId: "shareholderDividendsviaPhone"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      security:
+        - Token: []
+      parameters:
+        - name: "phone"
+          in: "query"
+          required: true
+          description: "Pls enter phone number"
+          type: "string"
+
+        - name: "page"
+          in: "query"
+          description: "Type the number of page to be display - For Pagination"
+          type: "integer"
+
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Dividends_Details"
+        "400":
+          description: "Invalid input"
+        "404":
+          description: Not found"
+
+  /customersdetailsemail:
+    get:
+      tags:
+        - "Shareholder"
+      summary: "Get Shareholders' dividend records Via Email Input"
+      description: ""
+      operationId: "shareholderDividendsviaEmail"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      security:
+        - Token: []
+      parameters:
+        - name: "email"
+          required: true
+          in: "query"
+          description: "Pls enter email address"
+          type: "string"
+
+        - name: "page"
+          in: "query"
+          description: "Type the number of page to be display - For Pagination"
+          type: "integer"
+
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Dividends_Details"
+        "400":
+          description: "Invalid input"
+        "404":
+          description: Not found"
+
+  /SendEmailOTP:
+    post:
+      tags:
+        - "Shareholder"
+      summary: "Get OTP request code via eMail"
+      description: ""
+      operationId: "SendEmailOTP"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/Email_opt"
+
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Email_opt"
+        "400":
+          description: "Invalid input"
+        "404":
+          description: "Not found"
+
+definitions:
+  Shareholders:
+    type: "object"
+    required:
+      - "last_nm"
+      - "id"
+      - "first_nm"
+      - "email"
+
+    properties:
+      id:
+        type: "string"
+      last_nm:
+        type: "string"
+        example: "Adebayo"
+      first_nm:
+        type: "string"
+        example: "Femi"
+      email:
+        type: "string"
+        example: "abioadex200@yahoo.com"
+      phone:
+        type: "string"
+        example: "08022858870"
+
+  P_OTP:
+    type: "object"
+    required:
+      - "phone"
+
+    properties:
+      phone:
+        type: "string"
+        example: "08022858870"
+
+  OTP:
+    type: "object"
+    required:
+      - "otp"
+
+    properties:
+      otp:
+        type: "string"
+        example: "90930"
+
+  Dividends_Details:
+    type: "object"
+    required:
+      - "email"
+      - "phone"
+
+    properties:
+      account_no:
+        type: "integer"
+        example: 2930
+
+      dividend_amt_naira:
+        type: "string"
+        example: "30000"
+
+      paiddate:
+        type: "string"
+        example: "21/09/2021"
+
+  Email_opt:
+    type: "object"
+    required:
+      - "email"
+
+    properties:
+      email:
+        type: "string"
+        example: "abioadex2000@yahoo.com"
